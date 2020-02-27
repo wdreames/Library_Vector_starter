@@ -146,11 +146,11 @@ void testfileIO(){
 	
 	//save it
 	EXPECT_EQ(SUCCESS, savePatrons(patrons, TMP_FILE.c_str()),"9",THREE_POINTS);
-	
+
 	//compare the 2 files (this could fail if you have an extra linefeed in your file)
 	//compare the 2 files (this could fail if you have an extra linefeed in your file)
 	if (does_file_exist(TMP_FILE) && does_file_exist(PATRONFILE))
-		EXPECT_EQ(true,diff_files(PATRONFILE, TMP_FILE),"10",FIVE_POINTS);	
+		EXPECT_EQ(true,diff_files(PATRONFILE, TMP_FILE),"10",FIVE_POINTS);
 }
 
 /*
