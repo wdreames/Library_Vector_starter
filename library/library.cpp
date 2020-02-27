@@ -48,7 +48,25 @@ void reloadAllData(){
  *         TOO_MANY_OUT patron has the max number of books allowed checked out
  */
 int checkout(int bookid, int patronid){
-	return SUCCESS;
+	for(int p = 0; p < numbPatrons(); p++){
+		if(patrons[p].patron_id == patronid){
+			for(int b = 0; b < numbBooks(); b++){
+				if(books[b].book_id == bookid and books[b].state == IN){
+					if(patrons[p].number_books_checked_out == MAX_BOOKS_ALLOWED_OUT){
+						return TOO_MANY_OUT;
+					}
+					else{
+						patrons[p].number_books_checked_out++;
+						books[b].loaned_to_patron_id = patrons[p].patron_id;
+						books[b].state = OUT;
+						return SUCCESS;
+					}
+				}
+			}
+			return BOOK_NOT_IN_COLLECTION;
+		}
+	}
+	return PATRON_NOT_ENROLLED;
 }
 
 /* check a book back in 
@@ -64,7 +82,20 @@ int checkout(int bookid, int patronid){
  * 		   BOOK_NOT_IN_COLLECTION
  */
 int checkin(int bookid){
-	return SUCCESS;
+	for(int i = 0; i<numbBooks(); i++){
+		if(books[i].book_id == bookid){
+			books[i].state = IN;
+			int patronid = books[i].loaned_to_patron_id;
+			for(int j = 0; j<numbPatrons(); j++){
+				if(patrons[j].patron_id == patronid){
+					patrons[j].number_books_checked_out--;
+					books[i].loaned_to_patron_id = NO_ONE;
+					return SUCCESS;
+				}
+			}
+		}
+	}
+	return BOOK_NOT_IN_COLLECTION;
 }
 
 /*
