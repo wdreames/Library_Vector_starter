@@ -1,4 +1,9 @@
 #include "../includes_usr/fileIO.h"
+#include <iostream>
+#include <fstream>
+#include <vector>
+#include <sstream>
+
 using namespace std;
 /* clears, then loads books from the file filename
  * returns  COULD_NOT_OPEN_FILE if cannot open filename
@@ -7,6 +12,50 @@ using namespace std;
  * */
 int loadBooks(std::vector<book> &books, const char* filename)
 {
+	fstream inputFile;
+	inputFile.open(filename, ios::in);
+	if(inputFile.is_open()){
+		vector<string> row;
+		string line, word;
+		int count = 0;
+		while(!inputFile.eof()){
+			row.clear();
+			getline(inputFile, line);
+			if(line != "" || count != 0){
+				//Separates data
+				stringstream ss(line);
+				while (getline(ss, word, ',')) {
+					row.push_back(word);
+				}
+				if(row.size() == 5){
+					book currentBook;
+					currentBook.book_id = stoi(row[0]);
+					currentBook.title = row[1];
+					currentBook.author = row[2];
+					int state = stoi(row[3]);
+					if(state == IN){
+						currentBook.state = IN;
+					}
+					else if(state == OUT){
+						currentBook.state = OUT;
+					}
+					else{
+						currentBook.state = UNKNOWN;
+					}
+					currentBook.loaned_to_patron_id = stoi(row[4]);
+					books.push_back(currentBook);
+				}
+				count++;
+			}
+			else{
+				return NO_BOOKS_IN_LIBRARY;
+			}
+		}
+		inputFile.close();
+	}
+	else{
+		return COULD_NOT_OPEN_FILE;
+	}
 	return SUCCESS;
 }
 
@@ -27,6 +76,39 @@ int saveBooks(std::vector<book> &books, const char* filename)
  * */
 int loadPatrons(std::vector<patron> &patrons, const char* filename)
 {
+	fstream inputFile;
+	inputFile.open(filename, ios::in);
+	if(inputFile.is_open()){
+		vector<string> row;
+		string line, word;
+		int count = 0;
+		while(!inputFile.eof()){
+			row.clear();
+			getline(inputFile, line);
+			if(line != "" || count != 0){
+				//Separates data
+				stringstream ss(line);
+				while (getline(ss, word, ',')) {
+					row.push_back(word);
+				}
+				if(row.size() == 3){
+					patron currentPatron;
+					currentPatron.patron_id = stoi(row[0]);
+					currentPatron.name = row[1];
+					currentPatron.number_books_checked_out = stoi(row[2]);
+					patrons.push_back(currentPatron);
+				}
+				count++;
+			}
+			else{
+				return NO_PATRONS_IN_LIBRARY;
+			}
+		}
+		inputFile.close();
+	}
+	else{
+		return COULD_NOT_OPEN_FILE;
+	}
 	return SUCCESS;
 }
 
