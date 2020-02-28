@@ -19,16 +19,17 @@ int loadBooks(std::vector<book> &books, const char* filename)
 		vector<string> row;
 		string line, word;
 		int count = 0;
+		//Inputs line by line
 		while(!inputFile.eof()){
 			row.clear();
 			getline(inputFile, line);
-			if(line != "" || count != 0){
+			if(line != "" || count != 0){ //Only breaks if the line is blank on the first line
 				//Separates data
 				stringstream ss(line);
 				while (getline(ss, word, ',')) {
 					row.push_back(word);
 				}
-				if(row.size() == 5){
+				if(row.size() == 5){ //Makes sure there are the correct number of inputs
 					book currentBook;
 					currentBook.book_id = stoi(row[0]);
 					currentBook.title = row[1];
@@ -106,16 +107,17 @@ int loadPatrons(std::vector<patron> &patrons, const char* filename)
 		vector<string> row;
 		string line, word;
 		int count = 0;
+		//Inputs line by line
 		while(!inputFile.eof()){
 			row.clear();
 			getline(inputFile, line);
-			if(line != "" || count != 0){
+			if(line != "" || count != 0){ //Only breaks if the line is blank on the first line
 				//Separates data
 				stringstream ss(line);
 				while (getline(ss, word, ',')) {
 					row.push_back(word);
 				}
-				if(row.size() == 3){
+				if(row.size() == 3){ //Makes sure there are the correct number of inputs
 					patron currentPatron;
 					currentPatron.patron_id = stoi(row[0]);
 					currentPatron.name = row[1];

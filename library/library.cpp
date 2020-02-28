@@ -49,13 +49,14 @@ void reloadAllData(){
  */
 int checkout(int bookid, int patronid){
 	for(int p = 0; p < numbPatrons(); p++){
-		if(patrons[p].patron_id == patronid){
+		if(patrons[p].patron_id == patronid){ //Finds the patron
 			for(int b = 0; b < numbBooks(); b++){
-				if(books[b].book_id == bookid and books[b].state == IN){
+				if(books[b].book_id == bookid and books[b].state == IN){ //Finds the book
 					if(patrons[p].number_books_checked_out == MAX_BOOKS_ALLOWED_OUT){
 						return TOO_MANY_OUT;
 					}
 					else{
+						//Checks out the book
 						patrons[p].number_books_checked_out++;
 						books[b].loaned_to_patron_id = patrons[p].patron_id;
 						books[b].state = OUT;
@@ -82,14 +83,15 @@ int checkout(int bookid, int patronid){
  * 		   BOOK_NOT_IN_COLLECTION
  */
 int checkin(int bookid){
-	for(int i = 0; i<numbBooks(); i++){
-		if(books[i].book_id == bookid){
-			books[i].state = IN;
-			int patronid = books[i].loaned_to_patron_id;
-			for(int j = 0; j<numbPatrons(); j++){
-				if(patrons[j].patron_id == patronid){
-					patrons[j].number_books_checked_out--;
-					books[i].loaned_to_patron_id = NO_ONE;
+	for(int b = 0; b<numbBooks(); b++){
+		if(books[b].book_id == bookid){ //Finds the book
+			books[b].state = IN;
+			int patronid = books[b].loaned_to_patron_id;
+			for(int p = 0; p<numbPatrons(); p++){
+				if(patrons[p].patron_id == patronid){ //Finds the patron
+					//Checks in the book
+					patrons[p].number_books_checked_out--;
+					books[p].loaned_to_patron_id = NO_ONE;
 					return SUCCESS;
 				}
 			}
@@ -110,7 +112,7 @@ int checkin(int bookid){
 int enroll(std::string &name){
 	patron new_patron;
 	if(numbPatrons() > 0){
-		new_patron.patron_id = patrons[numbPatrons()-1].patron_id + 1;
+		new_patron.patron_id = patrons[numbPatrons()-1].patron_id + 1; //New patron id is 1 + largest id
 	}
 	else{
 		new_patron.patron_id = 0;
@@ -128,7 +130,7 @@ int enroll(std::string &name){
  * 
  */
 int numbBooks(){
-	if(books.size() == 0){
+	if(books.size() == 0){ //Makes sure the data has been loaded
 		reloadAllData();
 	}
 	return books.size();
@@ -139,7 +141,7 @@ int numbBooks(){
  * (ie. if 3 patrons returns 3)
  */
 int numbPatrons(){
-	if(patrons.size() == 0){
+	if(patrons.size() == 0){ //Makes sure the data has been loaded
 		reloadAllData();
 	}
 	return patrons.size();
@@ -152,7 +154,7 @@ int numbPatrons(){
  */
 int howmanybooksdoesPatronHaveCheckedOut(int patronid){
 	for(int i = 0; i<numbPatrons(); i++){
-		if(patrons[i].patron_id == patronid){
+		if(patrons[i].patron_id == patronid){ //Finds the patron
 			return patrons[i].number_books_checked_out;
 		}
 	}
@@ -167,7 +169,7 @@ int howmanybooksdoesPatronHaveCheckedOut(int patronid){
  */
 int whatIsPatronName(std::string &name,int patronid){
 	for(int i = 0; i<numbPatrons(); i++){
-		if(patrons[i].patron_id == patronid){
+		if(patrons[i].patron_id == patronid){ //Finds the patron
 			name = patrons[i].name;
 			return SUCCESS;
 		}
