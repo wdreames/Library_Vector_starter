@@ -9,7 +9,6 @@
 #include "../includes_usr/fileIO.h"
 using namespace std;
 
-
 vector<book> books;
 vector<patron> patrons;
 
@@ -23,6 +22,7 @@ vector<patron> patrons;
  */
 void reloadAllData(){
 	books.clear();
+	patrons.clear();
 	loadBooks(books, BOOKFILE.c_str());
 	loadPatrons(patrons, PATRONFILE.c_str());
 }
@@ -128,6 +128,9 @@ int enroll(std::string &name){
  * 
  */
 int numbBooks(){
+	if(books.size() == 0){
+		reloadAllData();
+	}
 	return books.size();
 }
 
@@ -136,6 +139,9 @@ int numbBooks(){
  * (ie. if 3 patrons returns 3)
  */
 int numbPatrons(){
+	if(patrons.size() == 0){
+		reloadAllData();
+	}
 	return patrons.size();
 }
 

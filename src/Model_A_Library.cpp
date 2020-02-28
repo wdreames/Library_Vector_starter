@@ -132,7 +132,7 @@ void testfileIO(){
 	//compare the 2 files (this could fail if you have an extra linefeed in your file)
 	if (does_file_exist(TMP_FILE) && does_file_exist(BOOKFILE))
 		EXPECT_EQ(true,diff_files(BOOKFILE, TMP_FILE),"5",FIVE_POINTS);
-	
+
 	std::vector<patron> patrons;
 
 	//fail on loading bogus file
